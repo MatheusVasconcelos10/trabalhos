@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// Definição da estrutura do produto
+// DefiniÃ§Ã£o da estrutura do produto
 typedef struct {
     int codigo;
     char numero_serie[51];
@@ -11,20 +11,20 @@ typedef struct {
     int ano_validade;
 } Produto;
 
-// Definição da estrutura de nó do heap
+// DefiniÃ§Ã£o da estrutura de nÃ³ do heap
 typedef struct {
     Produto produto;
-    int prioridade; // Prioridade é a data de validade
+    int prioridade; 
 } HeapNode;
 
-// Definição da estrutura do heap
+// DefiniÃ§Ã£o da estrutura do heap
 typedef struct {
     HeapNode *itens;
     int capacidade;
     int tamanho;
 } MinHeap;
 
-// Protótipos de funções
+// ProtÃ³tipos de funÃ§Ãµes
 MinHeap *criarMinHeap(int capacidade);
 void inserir(MinHeap *heap, Produto produto, int prioridade);
 Produto removerMin(MinHeap *heap);
@@ -36,7 +36,7 @@ void excluir(MinHeap *heap, int codigo);
 void consultar(MinHeap *heap, int codigo);
 
 int main() {
-    // Inicialização do heap
+    // InicializaÃ§Ã£o do heap
     MinHeap *heap = criarMinHeap(100);
 
     int opcao;
@@ -66,7 +66,6 @@ int main() {
                 scanf("%d", &novoProduto.mes_validade);
                 printf("Ano: ");
                 scanf("%d", &novoProduto.ano_validade);
-                // Supondo que a prioridade seja o ano, mês e dia separadamente
                 inserir(heap, novoProduto, novoProduto.ano_validade * 10000 + novoProduto.mes_validade * 100 + novoProduto.dia_validade);
                 break;
             case 2: // Alterar Produto
@@ -102,13 +101,13 @@ int main() {
         }
     } while(opcao != 9);
 
-    // Liberar memória alocada para o heap
+    // Liberar memÃ³ria alocada para o heap
     liberarHeap(heap);
 
     return 0;
 }
 
-// Cria um heap mínimo com capacidade especificada
+// Cria um heap mÃ­nimo 
 MinHeap *criarMinHeap(int capacidade) {
     MinHeap *heap = (MinHeap *)malloc(sizeof(MinHeap));
     heap->itens = (HeapNode *)malloc(capacidade * sizeof(HeapNode));
@@ -117,7 +116,7 @@ MinHeap *criarMinHeap(int capacidade) {
     return heap;
 }
 
-// Insere um produto no heap com uma determinada prioridade
+// Insere um produto no heap
 void inserir(MinHeap *heap, Produto produto, int prioridade) {
     if (heap->tamanho == heap->capacidade) {
         printf("Heap cheio. Impossivel inserir.\n");
@@ -133,12 +132,12 @@ void inserir(MinHeap *heap, Produto produto, int prioridade) {
         indice = (indice - 1) / 2;
     }
 
-    // Insere o novo item na posição correta
+    // Insere o novo item na posiÃ§Ã£o correta
     heap->itens[indice].produto = produto;
     heap->itens[indice].prioridade = prioridade;
 }
 
-// Remove e retorna o produto com a menor prioridade (data de validade mais próxima)
+// Remove e retorna o produto com a menor prioridade (data de validade mais prÃ³xima)
 Produto removerMin(MinHeap *heap) {
     if (heap->tamanho <= 0) {
         printf("Heap vazio. Impossivel remover.\n");
@@ -149,10 +148,10 @@ Produto removerMin(MinHeap *heap) {
     // Armazena o produto com a menor prioridade
     Produto produtoRemovido = heap->itens[0].produto;
 
-    // Substitui o primeiro item pelo último
+    // Substitui o primeiro item pelo Ãºltimo
     heap->itens[0] = heap->itens[--heap->tamanho];
 
-    // Reorganiza o heap para manter a propriedade do heap mínimo
+    // Reorganiza o heap para manter a propriedade do heap mÃ­nimo
     int indice = 0;
     while (1) {
         int filhoEsquerdo = 2 * indice + 1;
@@ -183,7 +182,7 @@ void exibirProduto(Produto produto) {
     printf("Codigo: %d | Numero de Serie: %s | Data de Validade: %02d/%02d/%04d\n", produto.codigo, produto.numero_serie, produto.dia_validade, produto.mes_validade, produto.ano_validade);
 }
 
-// Lista todos os produtos do heap em ordem crescente de código
+// Lista todos os produtos do heap em ordem crescente de cÃ³digo
 void listarProdutos(MinHeap *heap) {
     if (heap->tamanho == 0) {
         printf("Nenhum produto cadastrado.\n");
@@ -191,7 +190,7 @@ void listarProdutos(MinHeap *heap) {
     }
 
     printf("Produtos cadastrados:\n");
-    // Ordena os produtos por código
+    // Ordena os produtos por cÃ³digo
     for (int i = 0; i < heap->tamanho - 1; i++) {
         for (int j = 0; j < heap->tamanho - i - 1; j++) {
             if (heap->itens[j].produto.codigo > heap->itens[j + 1].produto.codigo) {
@@ -208,17 +207,16 @@ void listarProdutos(MinHeap *heap) {
     }
 }
 
-// Libera a memória alocada para o heap
+// Libera a memÃ³ria alocada para o heap
 void liberarHeap(MinHeap *heap) {
     free(heap->itens);
     free(heap);
 }
 
-// Altera os dados de um produto com base no número de série fornecido
+// Altera os dados de um produto com base no nÃºmero de sÃ©rie fornecido
 void alterarProduto(MinHeap *heap, char *numero_serie) {
     int encontrados = 0;
 
-    // Percorre o heap em busca de produtos com o número de série fornecido
     for (int i = 0; i < heap->tamanho; i++) {
         if (strcmp(heap->itens[i].produto.numero_serie, numero_serie) == 0) {
             encontrados++;
@@ -236,7 +234,6 @@ void alterarProduto(MinHeap *heap, char *numero_serie) {
             scanf("%d", &heap->itens[i].produto.mes_validade);
             printf("Ano: ");
             scanf("%d", &heap->itens[i].produto.ano_validade);
-            // Supondo que a prioridade seja o ano, mês e dia separadamente
             heap->itens[i].prioridade = heap->itens[i].produto.ano_validade * 10000 + heap->itens[i].produto.mes_validade * 100 + heap->itens[i].produto.dia_validade;
             printf("Produto alterado com sucesso.\n");
         }
@@ -247,12 +244,11 @@ void alterarProduto(MinHeap *heap, char *numero_serie) {
     }
 }
 
-// Exclui um produto do heap com base no código fornecido
+// Exclui um produto do heap com base no cÃ³digo fornecido
 void excluir(MinHeap *heap, int codigo) {
-    int menorPrioridade = 99999999; // Um valor alto para garantir que seja inicializado corretamente
+    int menorPrioridade = 99999999; 
     int indiceMenorPrioridade = -1;
 
-    // Procura o produto com o menor prioridade (data de validade mais próxima) para o código fornecido
     for (int i = 0; i < heap->tamanho; i++) {
         if (heap->itens[i].produto.codigo == codigo && heap->itens[i].prioridade < menorPrioridade) {
             menorPrioridade = heap->itens[i].prioridade;
@@ -272,11 +268,11 @@ void excluir(MinHeap *heap, int codigo) {
     }
 }
 
-// Consulta produtos com um determinado código e os exibe em ordem de data de validade
+// Consulta produtos com um determinado cÃ³digo e os exibe em ordem de data de validade
 void consultar(MinHeap *heap, int codigo) {
     int encontrados = 0;
 
-    // Percorre o heap em busca de produtos com o código fornecido
+    
     for (int i = 0; i < heap->tamanho; i++) {
         if (heap->itens[i].produto.codigo == codigo) {
             encontrados++;
@@ -292,7 +288,6 @@ void consultar(MinHeap *heap, int codigo) {
 
     if (encontrados > 1) {
         printf("Produtos ordenados por data de validade:\n");
-        // Ordena os produtos encontrados com base na data de validade
         for (int i = 0; i < heap->tamanho - 1; i++) {
             for (int j = 0; j < heap->tamanho - i - 1; j++) {
                 if (heap->itens[j].produto.ano_validade > heap->itens[j + 1].produto.ano_validade ||
